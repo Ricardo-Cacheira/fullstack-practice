@@ -14,14 +14,7 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
   const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState([])
-
-  if(votes.length === 0)
-  {
-    for (let i = 0; i < anecdotes.length; i++) {
-      votes[i] = 0
-    }
-  }
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
   const handleNextClick = () => {
     const r = Math.floor(Math.random() * anecdotes.length)
