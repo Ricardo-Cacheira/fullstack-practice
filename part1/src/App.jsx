@@ -6,7 +6,7 @@ const Statistics = (props) => {
   if (props.reviews.good == 0 && props.reviews.neutral == 0 && props.reviews.bad == 0) {
     return (
       <div>
-        No reviews given
+        No feedback given
       </div>
     )
   }
