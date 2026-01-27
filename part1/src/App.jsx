@@ -12,15 +12,21 @@ const Statistics = (props) => {
   }
   return (
     <div>
-      good {props.reviews.good} <br />
-      neutral {props.reviews.neutral} <br />
-      bad {props.reviews.bad} <br />
-      all {props.reviews.good + props.reviews.neutral + props.reviews.bad} <br />
-      average {(props.reviews.good - props.reviews.bad) / total} <br />
-      positive {props.reviews.good / total * 100} % <br />
+      <StatisticLine text="good" value={props.reviews.good} />
+      <StatisticLine text="neutral" value={props.reviews.neutral} />
+      <StatisticLine text="bad" value={props.reviews.bad} />
+      <StatisticLine text="all" value={props.reviews.good + props.reviews.neutral + props.reviews.bad} />
+      <StatisticLine text="average" value={(props.reviews.good - props.reviews.bad) / total} />
+      <StatisticLine text="positive" value={(props.reviews.good / total * 100) + "%"} /> <br />
     </div>
   )
 }
+
+const StatisticLine = ({ text, value }) => (
+  <div>
+    <p>{text}: {value}</p>
+  </div>
+)
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
