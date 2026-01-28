@@ -4,14 +4,42 @@ const Header = ({ text }) => {
   return <h2>{text}</h2>
 }
 
+const Entry = ({ person }) => {
+return <li key={person.name}>{person.name} {person.number}</li>
+}
+
 const Phonebook = ({ persons }) => {
   return (
     <div>
-      {persons.map(person => 
-        <li key={person.name}>{person.name} {person.number}</li>
-      )}
+      {persons.map(person => <Entry key={person.name} person={person} />)}
     </div>
     )
+}
+
+const Filter = ({ filter, handleFilterChange }) => {
+  return (
+    <form>
+      <div>
+        filter shown with: <input value={filter} onChange={handleFilterChange} />
+      </div>
+    </form>
+  )
+}
+
+const PersonForm = ({ handleAddPerson, newName, handleNameChange, newNumber, handleNumberChange }) => {
+  return (
+    <form>
+      <div>
+        name: <input value={newName} onChange={handleNameChange} />
+      </div>
+      <div>
+        number: <input value={newNumber} onChange={handleNumberChange} />
+      </div>
+      <div>
+        <button onClick={handleAddPerson} type="submit">add</button>
+      </div>
+    </form>
+  )
 }
 
 const App = () => {
@@ -67,23 +95,15 @@ const App = () => {
   return (
     <div>
       <Header text="Phonebook" />
-      <form>
-        <div>
-          filter shown with: <input value={filter} onChange={handleFilterChange} />
-        </div>
-      </form>
+      <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <Header text="add a new" />
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button onClick={handleAddPerson} type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm 
+        handleAddPerson={handleAddPerson} 
+        newName={newName} 
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
       <Header text="Numbers" />
       <Phonebook persons={numbersToShow} />
     </div>
