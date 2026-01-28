@@ -8,7 +8,7 @@ const Phonebook = ({ persons }) => {
   return (
     <div>
       {persons.map(person => 
-        <li key={person.name}>{person.name}</li>
+        <li key={person.name}>{person.name} {person.number}</li>
       )}
     </div>
     )
@@ -16,17 +16,27 @@ const Phonebook = ({ persons }) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: '040-123456' },
   ]) 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const handleNameChange = (event) => {
     //console.log(event.target.value)
     setNewName(event.target.value)
   }
 
-  const handleAddName = (event) => {
+  const handleNumberChange = (event) => {
+    //console.log(event.target.value)
+    setNewNumber(event.target.value)
+  }
+
+  const handleAddPerson = (event) => {
     event.preventDefault()
+    if(newName === '' || newNumber === '') {
+      alert('Name or Number cannot be empty')
+      return
+    }
 
     if(persons.some(person => person.name === newName)) {
       alert(`${newName} is already added to phonebook`)
@@ -34,9 +44,11 @@ const App = () => {
     }
     const nameObject = {
       name: newName,
+      number: newNumber,
     }
     setPersons(persons.concat(nameObject))
     setNewName('')
+    setNewNumber('')
   }
 
   return (
@@ -47,7 +59,10 @@ const App = () => {
           name: <input value={newName} onChange={handleNameChange} />
         </div>
         <div>
-          <button onClick={handleAddName} type="submit">add</button>
+          number: <input value={newNumber} onChange={handleNumberChange} />
+        </div>
+        <div>
+          <button onClick={handleAddPerson} type="submit">add</button>
         </div>
       </form>
       <Header text="Numbers" />
