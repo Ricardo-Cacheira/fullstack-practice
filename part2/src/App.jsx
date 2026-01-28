@@ -12,14 +12,13 @@ const Part = (props) => (
   </p>
 )
 
-const Course = ({course}) => 
+const Course = ({name, parts}) => 
 {
-  let total = 0;
-  course.parts.forEach(part => { total += part.exercises; });
+  const total = parts.reduce((sum, part) => sum + part.exercises, 0)
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
+      <Header course={name} />
+      <Content parts={parts} />
       <Total total={total} />
     </div>
   )
@@ -54,7 +53,7 @@ const App = () => {
     ]
   }
 
-  return <Course course={course} />
+  return <Course name={course.name} parts={course.parts} />
 }
 
 export default App
