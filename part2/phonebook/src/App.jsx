@@ -6,30 +6,21 @@ const Header = ({ text }) => {
   return <h2>{text}</h2>
 }
 
-const Entry = ({ person }) => {
+const Entry = ({ person, handleRemove }) => {
 
-  const remove = () => {
-    if(window.confirm(`Delete ${person.name} ?`)) {
-      phonebookService
-        .remove(person.id)
-        .then(() => {
-          window.location.reload()
-        })
-    }
-  }
 
   return (
     <li key={person.name}>
       {person.name} {person.number}
-      <button onClick={remove}> delete </button>
+      <button onClick={() => handleRemove(person)}> delete </button>
       </li>
   )
 }
 
-const Phonebook = ({ persons }) => {
+const Phonebook = ({ persons, handleRemove }) => {
   return (
     <div>
-      {persons.map(person => <Entry key={person.name} person={person} />)}
+      {persons.map(person => <Entry key={person.name} person={person} handleRemove={handleRemove} />)}
     </div>
     )
 }
@@ -65,7 +56,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState('notification')
 
   useEffect(() => {
     phonebookService
@@ -122,20 +114,34 @@ const App = () => {
         setPersons(persons.concat(returnedNumber))
         setNewName('')
         setNewNumber('')
-        
-        setErrorMessage(
-          `Added ${nameObject.name}`
-        )
+
+        setMessage( `Added ${nameObject.name}` )
+        setMessageType('notification')
         setTimeout(() => {
-          setErrorMessage(null)
+          setMessage(null)
         }, 5000)
       })
+  }
+
+  const remove = (person) => {
+    if(window.confirm(`Delete ${person.name} ?`)) {
+      phonebookService
+        .remove(person.id)
+        .then(() => {
+          window.location.reload()
+        })
+        .catch(error => {
+          setMessage( `Information of ${person.name} was already removed from server` )
+          setMessageType('error')
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+    }
   }
 
   return (
     <div>
       <Header text="Phonebook" />
-      <Notification message={errorMessage} />
+      <Notification message={message} type={messageType} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <Header text="add a new" />
       <PersonForm 
@@ -146,7 +152,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <Header text="Numbers" />
-      <Phonebook persons={numbersToShow} />
+      <Phonebook persons={numbersToShow} handleRemove={remove} />
     </div>
   )
 }
