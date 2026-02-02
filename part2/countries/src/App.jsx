@@ -50,7 +50,10 @@ function App() {
         :
           <div>
             {countriesToShow.map(country => 
-              <li key={country.name.common}>{country.name.common}</li>
+              <li key={country.name.common}>
+                {country.name.common}
+                <button onClick={() => setFilter(country.name.common)}>Show</button>
+              </li>
             )}
           </div>
       }
