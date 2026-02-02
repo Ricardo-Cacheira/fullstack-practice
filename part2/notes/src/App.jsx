@@ -48,12 +48,7 @@ const App = () => {
       important: Math.random() > 0.5
     }
 
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
-      })
+
   }
 
   return (
