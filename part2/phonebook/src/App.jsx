@@ -6,7 +6,23 @@ const Header = ({ text }) => {
 }
 
 const Entry = ({ person }) => {
-return <li key={person.name}>{person.name} {person.number}</li>
+
+  const remove = () => {
+    if(window.confirm(`Delete ${person.name} ?`)) {
+      phonebookService
+        .remove(person.id)
+        .then(() => {
+          window.location.reload()
+        })
+    }
+  }
+
+  return (
+    <li key={person.name}>
+      {person.name} {person.number}
+      <button onClick={remove}> delete </button>
+      </li>
+  )
 }
 
 const Phonebook = ({ persons }) => {
@@ -83,8 +99,15 @@ const App = () => {
       return
     }
 
-    if(persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    if(persons.some(person => person.name === newName))
+    {
+      if(window.confirm(`${newName} is already added to phonebook, update the number instead?`)) {
+      phonebookService
+        .update(persons.find(p => p.name === newName).id, {name: newName, number: newNumber})
+        .then(() => {
+          window.location.reload()
+        })
+    }
       return
     }
     const nameObject = {
