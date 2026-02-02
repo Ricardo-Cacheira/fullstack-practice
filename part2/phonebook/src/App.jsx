@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Notification from './Components/Notification'
 import phonebookService from './services/phonebook'
 
 const Header = ({ text }) => {
@@ -64,6 +65,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     phonebookService
@@ -102,12 +104,12 @@ const App = () => {
     if(persons.some(person => person.name === newName))
     {
       if(window.confirm(`${newName} is already added to phonebook, update the number instead?`)) {
-      phonebookService
-        .update(persons.find(p => p.name === newName).id, {name: newName, number: newNumber})
-        .then(() => {
-          window.location.reload()
-        })
-    }
+        phonebookService
+          .update(persons.find(p => p.name === newName).id, {name: newName, number: newNumber})
+          .then(() => {
+            window.location.reload()
+          })
+      }
       return
     }
     const nameObject = {
@@ -117,15 +119,23 @@ const App = () => {
     phonebookService
       .add(nameObject)
       .then(returnedNumber => {
-        setPersons(persons.concat(nameObject))
+        setPersons(persons.concat(returnedNumber))
         setNewName('')
         setNewNumber('')
+        
+        setErrorMessage(
+          `Added ${nameObject.name}`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
   }
 
   return (
     <div>
       <Header text="Phonebook" />
+      <Notification message={errorMessage} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <Header text="add a new" />
       <PersonForm 
