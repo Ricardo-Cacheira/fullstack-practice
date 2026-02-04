@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 
-const people =
+let people =
 [
     { 
       "id": "1",
@@ -45,6 +45,13 @@ app.get('/api/persons/:id', (request, response) => {
         response.statusMessage = "Person not found";
         response.status(404).end()
     }
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = request.params.id
+    people = people.filter(person => person.id !== id)
+    console.log(people)
+    response.status(204).end()
 })
 
 const PORT = 3001
