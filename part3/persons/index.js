@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 app.use(express.json())
+app.use(morgan('tiny'))
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -10,7 +12,7 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-app.use(requestLogger)
+// app.use(requestLogger)
 
 let people =
 [
