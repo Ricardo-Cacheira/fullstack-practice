@@ -21,22 +21,27 @@ app.get('/api/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = people.find(person => person.id === id)
-    if (person)
-        response.json(person)
-    else
-    {
-        response.statusMessage = "Person not found";
-        response.status(404).end()
-    }
+    const id = request.params.id
+    Number.findById(id).then(person => {
+        if (person)
+            response.json(person)
+        else
+        {
+            response.statusMessage = "Person not found";
+            return response.status(404).end()
+        }
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    people = people.filter(person => person.id !== id)
-    // console.log(people)
-    response.status(204).end()
+    Number.findByIdAndDelete(request.params.id)
+    .then(result => {
+        response.status(204).end()
+    })
+    .catch(error => {
+        response.statusMessage = "Person not found";
+        return response.status(404).end()
+    })
 })
 
 app.post('/api/persons', (request, response) => {
