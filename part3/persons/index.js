@@ -39,11 +39,6 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-const generateId = () => {
-    const id = Math.floor(Math.random(0, ) * 10000)
-    return String(id)
-}
-
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
@@ -60,20 +55,21 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    if(people.find(person => person.name === body.name)) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
+    //ignore for now, as we will later check for duplicates in the database
+    // if(people.find(person => person.name === body.name)) {
+    //     return response.status(400).json({
+    //         error: 'name must be unique'
+    //     })
+    // }
 
-    const person = {
-        id: generateId(),
+    const person = new Number({
         name: body.name,
         number: body.number
-    }
+    })
 
-    people = people.concat(person)
-    response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const unknownEndpoint = (request, response) => {
