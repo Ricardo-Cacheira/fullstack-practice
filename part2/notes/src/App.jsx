@@ -51,13 +51,22 @@ const App = () => {
     setNewNote(event.target.value)
   }
   const addNote = (event) => {
+    console.log('AAAAAAAAAA')
     event.preventDefault()
     const noteObject = {
       content: newNote,
       important: Math.random() > 0.5
     }
 
-
+    noteService
+    .create(noteObject)
+    .then(returnedNote => {
+      setNotes(notes.concat(returnedNote))
+      setNewNote('')
+    })
+    .catch(error => {
+      setErrorMessage( error.message)
+    })
   }
 
   return (
