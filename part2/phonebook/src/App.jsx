@@ -8,7 +8,6 @@ const Header = ({ text }) => {
 
 const Entry = ({ person, handleRemove }) => {
 
-
   return (
     <li key={person.name}>
       {person.name} {person.number}
