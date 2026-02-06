@@ -16,8 +16,11 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/info', (request, response) => {
-    const info = `<p>Phonebook has info for ${people.length} people</p><p>${new Date()}</p>`
-    response.send(info)
+    Number.find({}).then(persons => {
+        const info = `<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`
+        response.send(info)
+    })
+
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
