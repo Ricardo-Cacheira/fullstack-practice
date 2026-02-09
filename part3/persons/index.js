@@ -87,10 +87,8 @@ app.put('/api/persons/:id', (request, response, next) => {
       if (!entry) {
         return response.status(404).end()
       }
-
       entry.name = name
       entry.number = number
-
       return entry.save().then((updatedNumber) => {
         response.json(updatedNumber)
       })
