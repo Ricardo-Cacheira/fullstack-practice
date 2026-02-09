@@ -120,6 +120,11 @@ const App = () => {
           setMessage(null)
         }, 5000)
       })
+      .catch(error => {
+        console.log(error.response.data.error)
+        setMessage( error.response.data.error)
+        setMessageType('error')
+      })
   }
 
   const remove = (person) => {
