@@ -7,7 +7,7 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 mongoose.connect(url, { family: 4 })
 
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch(error => {
@@ -15,22 +15,22 @@ mongoose.connect(url, { family: 4 })
   })
 
 const numberSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      minLength: 3,
-      required: true
-    },
-    number: {
-      type: String,
-      validate:
-      {
-        validator: function(v) {
-          return /\d{2,3}-\d{7,8}/.test(v);
-        },
-        message: props => `${props.value} is not a valid phone number!`
+  name: {
+    type: String,
+    minLength: 3,
+    required: true,
+  },
+  number: {
+    type: String,
+    validate:
+    {
+      validator: function(v) {
+        return /\d{2,3}-\d{7,8}/.test(v)
       },
-      required: true
-    }
+      message: props => `${props.value} is not a valid phone number!`
+    },
+    required: true,
+  }
 })
 
 numberSchema.set('toJSON', {

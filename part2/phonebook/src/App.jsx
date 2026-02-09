@@ -134,7 +134,7 @@ const App = () => {
         .then(() => {
           window.location.reload()
         })
-        .catch(error => {
+        .catch(() => {
           setMessage( `Information of ${person.name} was already removed from server` )
           setMessageType('error')
           setPersons(persons.filter(p => p.id !== person.id))
