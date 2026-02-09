@@ -51,7 +51,6 @@ const App = () => {
     setNewNote(event.target.value)
   }
   const addNote = (event) => {
-    console.log('AAAAAAAAAA')
     event.preventDefault()
     const noteObject = {
       content: newNote,
