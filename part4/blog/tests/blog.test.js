@@ -52,6 +52,7 @@ likes: 2,
 __v: 0
 }  
 ]
+
 const listWithOneBlog = [
 {
     _id: '5a422aa71b54a676234d17f8',
@@ -132,6 +133,33 @@ describe('most blog', () => {
     {
         author: "Robert C. Martin",
         blogs: 3
+    })
+  })
+
+})
+
+describe('most likes', () => {
+
+  test('of empty list is null', () => {
+    const result = listHelper.mostLikes([])
+    assert.strictEqual(result, null)
+  })
+
+  test('when list has only one blog, equals that blog', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    assert.deepStrictEqual(result, 
+    {
+        author: 'Edsger W. Dijkstra',
+        likes: 6
+    })
+  })
+
+  test('of a bigger list is found right', () => {
+    const result = listHelper.mostLikes(blogs)
+    assert.deepStrictEqual(result, 
+    {
+        author: "Edsger W. Dijkstra",
+        likes: 17
     })
   })
 
