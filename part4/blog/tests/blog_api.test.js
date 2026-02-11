@@ -49,6 +49,22 @@ test.only('new valid blog can be created', async () => {
   assert.ok(titles.includes('New Blog'))  
 })
 
+test.only('default likes value is 0', async () => {
+  const newBlog = {
+    title: 'New Blog',
+    author: 'New Author',
+    url: 'https://example.com/new-blog'
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  assert.ok(response.body.likes === 0)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
