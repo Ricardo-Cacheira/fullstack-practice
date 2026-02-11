@@ -28,6 +28,27 @@ test.only('all blogs have an id', async () => {
   })
 })
 
+test.only('new valid blog can be created', async () => {
+  const newBlog = {
+    title: 'New Blog',
+    author: 'New Author',
+    url: 'https://example.com/new-blog',
+    likes: 5
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await api.get('/api/blogs')
+  assert.strictEqual(blogsAtEnd.body.length, helper.initialBlogs.length + 1)
+
+  const titles = blogsAtEnd.body.map(b => b.title)
+  assert.ok(titles.includes('New Blog'))  
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
