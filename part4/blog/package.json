@@ -10,7 +10,9 @@
     "start": "node index.js",
     "dev": "node --watch index.js",
     "test": "node --test",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "testBlog": "npm test -- tests/blog_api.test.js",
+    "only": "npm test -- --test-only"
   },
   "dependencies": {
     "dotenv": "^17.2.4",
@@ -21,6 +23,7 @@
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.8.0",
     "eslint": "^10.0.0",
-    "globals": "^17.3.0"
+    "globals": "^17.3.0",
+    "supertest": "^7.2.2"
   }
 }
