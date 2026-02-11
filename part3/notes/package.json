@@ -13,7 +13,9 @@
     "build:ui": "rm -rf dist && cd ../../part2/notes && npm run build && cp -r dist ../../part3/notes",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "lint": "eslint .",
-    "mongo": "cross-env NODE_ENV=test node mongo.js"
+    "mongo": "cross-env NODE_ENV=test node mongo.js",
+    "only": "npm test -- --test-only",
+    "testNote": "npm test -- tests/note_api.test.js"
   },
   "dependencies": {
     "cross-env": "^10.1.0",
