@@ -3,8 +3,16 @@ const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
+    minLength: 4, //make it so «test» is valid
     required: true,
-    unique: true // this ensures the uniqueness of username
+    unique: true, // this ensures the uniqueness of username
+    validate:
+    {
+      validator: function(v) {
+        return /^[a-zA-Z0-9_]*$/.test(v)
+      },
+      message: props => `${props.value} is not a valid username!`
+    },
   },
   name: String,
   passwordHash: String,

@@ -5,6 +5,15 @@ const User = require('../models/user')
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
+  if(!password || password.length < 3) {
+    return response.status(400).json({ error: 'password is required and must be at least 3 characters long' })
+  }
+
+  const regex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d!@#$%&*]{8,}$/
+  if(!regex.test(password)) {
+    return response.status(400).json({ error: 'password must be at least 8 characters long and contain at least 1 letter and 1 digit' })
+  }
+
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
