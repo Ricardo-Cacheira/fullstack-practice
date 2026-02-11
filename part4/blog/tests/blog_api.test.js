@@ -16,12 +16,12 @@ describe('when there is initially some blogs saved', () => {
 
     describe('validate blog data', () => {
 
-        test.only('all blogs are returned', async () => {
+        test('all blogs are returned', async () => {
             const response = await api.get('/api/blogs')
             assert.strictEqual(response.body.length, helper.initialBlogs.length)
         })
 
-        test.only('all blogs have an id', async () => {
+        test('all blogs have an id', async () => {
             const response = await api.get('/api/blogs')
             response.body.forEach((blog) => {
                 assert.ok(blog.id)
@@ -30,7 +30,7 @@ describe('when there is initially some blogs saved', () => {
     })
 
     describe('adding blog data', () => {
-        test.only('new valid blog can be created', async () => {
+        test('new valid blog can be created', async () => {
         const newBlog = {
             title: 'New Blog',
             author: 'New Author',
@@ -51,7 +51,7 @@ describe('when there is initially some blogs saved', () => {
         assert.ok(titles.includes('New Blog'))  
         })
 
-        test.only('default likes value is 0', async () => {
+        test('default likes value is 0', async () => {
         const newBlog = {
             title: 'New Blog',
             author: 'New Author',
@@ -85,7 +85,7 @@ describe('when there is initially some blogs saved', () => {
 
     
     describe('manipulating blog data', () => {
-        test.only('a blog can be deleted', async () => {
+        test('a blog can be deleted', async () => {
             const blogsAtStart = await helper.blogsInDb()
             const blogToDelete = blogsAtStart[0]
 
@@ -98,6 +98,26 @@ describe('when there is initially some blogs saved', () => {
 
             const titles = blogsAtEnd.map(b => b.title)
             assert.ok(!titles.includes(blogToDelete.title))
+        })
+
+        test.only('a blog can be updated', async () => {
+            const blogsAtStart = await helper.blogsInDb()
+            const blogToUpdate = blogsAtStart[0]
+
+            const updatedBlogData = {
+                title: 'Updated Blog',
+                author: 'Updated Author',
+                url: 'https://example.com/updated-blog',
+                likes: 10
+            }
+
+            const response = await api
+                .put(`/api/blogs/${blogToUpdate.id}`)
+                .send(updatedBlogData)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+                
+            assert.deepStrictEqual(response.body, { ...updatedBlogData, id: blogToUpdate.id })
         })
     })
 })
