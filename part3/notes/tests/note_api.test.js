@@ -85,6 +85,7 @@ describe('when there is initially some notes saved', () => {
       const newNote = {
         content: 'async/await simplifies making async calls',
         important: true,
+        userId: (await helper.usersInDb())[0].id
       }
 
       await api
