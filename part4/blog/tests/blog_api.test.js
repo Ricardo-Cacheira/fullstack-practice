@@ -20,6 +20,14 @@ test.only('all blogs are returned', async () => {
 
 })
 
+test.only('all blogs have an id', async () => {
+  const response = await api.get('/api/blogs')
+
+  response.body.forEach((blog) => {
+    assert.ok(blog.id)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
