@@ -15,9 +15,11 @@
     "lint": "eslint .",
     "mongo": "cross-env NODE_ENV=test node mongo.js",
     "only": "npm test -- --test-only",
-    "testNote": "npm test -- tests/note_api.test.js"
+    "testNote": "npm test -- tests/note_api.test.js",
+    "testUser": "npm test -- tests/user_api.test.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cross-env": "^10.1.0",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
