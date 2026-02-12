@@ -7,16 +7,17 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js",
-    "test": "node --test",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development node --watch index.js",
+    "test": "cross-env  NODE_ENV=test node --test",
     "lint": "eslint .",
-    "testBlog": "npm test -- tests/blog_api.test.js",
+    "testBlog": "cross-env NODE_ENV=test npm run test -- tests/blog_api.test.js",
     "only": "npm test -- --test-only",
-    "testUser": "npm test -- tests/user_api.test.js"
+    "testUser": "cross-env NODE_ENV=test npm run test -- tests/user_api.test.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",

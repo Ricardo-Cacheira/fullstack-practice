@@ -1,17 +1,24 @@
 const assert = require('node:assert')
 const { test, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
 describe('when there is initially some blogs saved', () => {
     beforeEach(async () => {
+    await User.deleteMany({})
+    const passwordHash = await bcrypt.hash('password123', 10)
+    const user = new User({ username: 'ricardo', passwordHash, name: 'Ricardo', blogs: [] })
+    const savedUser = await user.save()
+
     await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
+    await Blog.insertMany(helper.initialBlogs.map(blog => ({ ...blog, user: savedUser._id, author: savedUser.name })))
     })
 
     describe('validate blog data', () => {
@@ -31,9 +38,16 @@ describe('when there is initially some blogs saved', () => {
 
     describe('adding blog data', () => {
         test('new valid blog can be created', async () => {
+
+        const login = await api
+            .post('/api/login')
+            .send({ username: 'ricardo', password: 'password123' })
+            .expect(200)
+
+        const token = login.body.token
+
         const newBlog = {
             title: 'New Blog',
-            author: 'New Author',
             url: 'https://example.com/new-blog',
             likes: 5
         }
@@ -41,6 +55,7 @@ describe('when there is initially some blogs saved', () => {
         await api
             .post('/api/blogs')
             .send(newBlog)
+            .auth(token, { type: 'bearer' })
             .expect(201)
             .expect('Content-Type', /application\/json/)
 
@@ -52,29 +67,47 @@ describe('when there is initially some blogs saved', () => {
         })
 
         test('default likes value is 0', async () => {
-        const newBlog = {
-            title: 'New Blog',
-            author: 'New Author',
-            url: 'https://example.com/new-blog'
-        }
 
-        const response = await api
-            .post('/api/blogs')
-            .send(newBlog)
-            .expect(201)
-            .expect('Content-Type', /application\/json/)
+            const login = await api
+                .post('/api/login')
+                .send({ username: 'ricardo', password: 'password123' })
+                .expect(200)
 
-        assert.ok(response.body.likes === 0)
+            const token = login.body.token
+
+            const newBlog = {
+                title: 'New Blog',
+                url: 'https://example.com/new-blog'
+            }
+
+            const response = await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .auth(token, { type: 'bearer' })
+                .expect(201)
+                .expect('Content-Type', /application\/json/)
+
+            assert.ok(response.body.likes === 0)
         })
 
         test('blog without title or url is not added', async () => {
+
+            
+        const login = await api
+            .post('/api/login')
+            .send({ username: 'ricardo', password: 'password123' })
+            .expect(200)
+
+        const token = login.body.token
+
         const newBlog = {
             author: 'New Author',
         }
 
-        const response = await api
+        await api
             .post('/api/blogs')
             .send(newBlog)
+            .auth(token, { type: 'bearer' })
             .expect(400)
 
         const blogsAtEnd = await helper.blogsInDb()
@@ -83,14 +116,20 @@ describe('when there is initially some blogs saved', () => {
         })
     })
 
-    
     describe('manipulating blog data', () => {
         test('a blog can be deleted', async () => {
+            const login = await api
+                .post('/api/login')
+                .send({ username: 'ricardo', password: 'password123' })
+                .expect(200)
+
+            const token = login.body.token
             const blogsAtStart = await helper.blogsInDb()
             const blogToDelete = blogsAtStart[0]
 
             await api
                 .delete(`/api/blogs/${blogToDelete.id}`)
+                .auth(token, { type: 'bearer' })
                 .expect(204)
 
             const blogsAtEnd = await helper.blogsInDb()
@@ -100,13 +139,18 @@ describe('when there is initially some blogs saved', () => {
             assert.ok(!titles.includes(blogToDelete.title))
         })
 
-        test.only('a blog can be updated', async () => {
+        test('a blog can be updated', async () => {
+            const login = await api
+                .post('/api/login')
+                .send({ username: 'ricardo', password: 'password123' })
+                .expect(200)
+
+            const token = login.body.token
             const blogsAtStart = await helper.blogsInDb()
             const blogToUpdate = blogsAtStart[0]
 
             const updatedBlogData = {
                 title: 'Updated Blog',
-                author: 'Updated Author',
                 url: 'https://example.com/updated-blog',
                 likes: 10
             }
@@ -114,10 +158,11 @@ describe('when there is initially some blogs saved', () => {
             const response = await api
                 .put(`/api/blogs/${blogToUpdate.id}`)
                 .send(updatedBlogData)
+                .auth(token, { type: 'bearer' })
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
-                
-            assert.deepStrictEqual(response.body, { ...updatedBlogData, id: blogToUpdate.id })
+
+            assert.deepStrictEqual(response.body, { ...updatedBlogData, id: blogToUpdate.id, user: blogToUpdate.user.toString() })
         })
     })
 })
