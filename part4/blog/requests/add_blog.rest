@@ -3,8 +3,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJpY2FyZG8iLCJpZCI6IjY5OGRkZDM4Yzk0ZjU3MjNiNTIwNWFjYiIsImlhdCI6MTc3MDkwNzEyNiwiZXhwIjoxNzcwOTEwNzI2fQ.J7sWQVQPe4UqDf805do3M5ZDN-pCKEoA_auJZpAxt5w
 
 {
-  "title": "Testing token based auth",
-  "author": "Ricardo",
+  "title": "test3",
   "url": "https://example.com/my-first-blog-post",
   "likes": 5
 }
