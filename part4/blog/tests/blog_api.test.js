@@ -90,6 +90,26 @@ describe('when there is initially some blogs saved', () => {
             assert.ok(response.body.likes === 0)
         })
 
+        test('adding a blog fails without token provided', async () => {
+
+        const newBlog = {
+            title: 'New Blog',
+            url: 'https://example.com/new-blog',
+            likes: 5
+        }
+
+        const result = await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(401)
+
+        const blogsAtEnd = await helper.blogsInDb()
+
+        assert(result.body.error.includes('token invalid'))
+
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+        })
+
         test('blog without title or url is not added', async () => {
 
             
