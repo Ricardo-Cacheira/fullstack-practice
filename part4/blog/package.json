@@ -12,7 +12,8 @@
     "test": "node --test",
     "lint": "eslint .",
     "testBlog": "npm test -- tests/blog_api.test.js",
-    "only": "npm test -- --test-only"
+    "only": "npm test -- --test-only",
+    "testUser": "npm test -- tests/user_api.test.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
