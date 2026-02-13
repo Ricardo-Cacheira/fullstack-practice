@@ -1,15 +1,24 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Login from './components/Login'
 import blogService from './services/blogs'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [errorMessage, setErrorMessage] = useState('')
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
   }, [])
+
+  if (user === null) {
+    return (
+      <Login setErrorMessage={setErrorMessage} user={user} setUser={setUser} />
+    )
+  }
 
   return (
     <div>
