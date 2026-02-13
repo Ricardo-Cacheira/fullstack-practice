@@ -2,7 +2,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import Blog from './Blog'
 
-const BlogForm = ({ user, blogs, setBlogs, setErrorMessage }) => {
+const BlogForm = ({ user, blogs, setBlogs, setMessage, setMessageType }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -27,9 +27,12 @@ const BlogForm = ({ user, blogs, setBlogs, setErrorMessage }) => {
       setTitle('')
       setAuthor('')
       setUrl('')
+      setMessage(`a new blog ${title} by ${author} added`)
+      setMessageType('notification')
     })
     .catch(error => {
-      setErrorMessage( error.message)
+      setMessage( error.message)
+      setMessageType('error')
     })
   }
 

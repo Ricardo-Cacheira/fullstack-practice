@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import Notification from './Notification'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-const Login = ({ setErrorMessage, user, setUser }) => {
+const Login = ({ setMessage, setMessageType, user, setUser, message, messageType }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -21,10 +22,12 @@ const Login = ({ setErrorMessage, user, setUser }) => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch {
-      setErrorMessage('wrong credentials')
+    }
+    catch {
+      setMessageType('error')
+      setMessage('wrong username or password')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
   }
@@ -32,6 +35,7 @@ const Login = ({ setErrorMessage, user, setUser }) => {
   const loginForm = () => (
     <>
       <h2>Log in to application</h2>
+      <Notification message={message} type={messageType} />
       <form onSubmit={handleLogin}>
         <div>
           <label>
