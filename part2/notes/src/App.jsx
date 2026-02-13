@@ -3,12 +3,15 @@ import noteService from './services/notes'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
+import Login from './components/Login'
+import NotificationForm from './components/NotificationForm'
+
 
 const App = () => {
   const [notes, setNotes] = useState(null)
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     noteService
@@ -46,32 +49,16 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important === true)
 
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-  }
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5
-    }
 
-    noteService
-    .create(noteObject)
-    .then(returnedNote => {
-      setNotes(notes.concat(returnedNote))
-      setNewNote('')
-    })
-    .catch(error => {
-      setErrorMessage( error.message)
-    })
-  }
 
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
+
+      <Login setErrorMessage={setErrorMessage} user={user} setUser={setUser} />
+      <NotificationForm user={user} noets={notes} setNotes={setNotes} setErrorMessage={setErrorMessage} />
+
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -83,10 +70,6 @@ const App = () => {
         )}
       </ul>
 
-      <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} />
-        <button type="submit">save</button>
-      </form>
       <Footer />
     </div>
   )
