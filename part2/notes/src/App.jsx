@@ -4,7 +4,7 @@ import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import Login from './components/Login'
-import NotificationForm from './components/NotificationForm'
+import NoteForm from './components/NoteForm'
 
 
 const App = () => {
@@ -57,7 +57,7 @@ const App = () => {
       <Notification message={errorMessage} />
 
       <Login setErrorMessage={setErrorMessage} user={user} setUser={setUser} />
-      <NotificationForm user={user} noets={notes} setNotes={setNotes} setErrorMessage={setErrorMessage} />
+      <NoteForm user={user} notes={notes} setNotes={setNotes} setErrorMessage={setErrorMessage} />
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>

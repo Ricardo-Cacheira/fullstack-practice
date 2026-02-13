@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import loginService from '../services/login'
+import noteService from '../services/notes'
 
 const Login = ({ setErrorMessage, user, setUser }) => {
   const [username, setUsername] = useState('')
@@ -11,6 +12,7 @@ const Login = ({ setErrorMessage, user, setUser }) => {
 
     try {
       const user = await loginService.login({ username, password })
+      noteService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')

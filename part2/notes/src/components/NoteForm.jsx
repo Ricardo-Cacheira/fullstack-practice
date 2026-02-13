@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import noteService from '../services/notes'
 
-const NotificationForm = ({ user, notes, setNotes, setErrorMessage }) => {
+const NoteForm = ({ user, notes, setNotes, setErrorMessage }) => {
   const [newNote, setNewNote] = useState('')
   
   const handleNoteChange = (event) => {
@@ -47,4 +47,4 @@ const NotificationForm = ({ user, notes, setNotes, setErrorMessage }) => {
 }
 
 
-export default NotificationForm
+export default NoteForm
