@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
 import Login from './components/Login'
 import blogService from './services/blogs'
 
@@ -41,6 +42,7 @@ const App = () => {
       {user.name} logged in 
       <button onClick={logout}>logout</button>
       <br /> <br />
+      <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} setErrorMessage={setErrorMessage} />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
