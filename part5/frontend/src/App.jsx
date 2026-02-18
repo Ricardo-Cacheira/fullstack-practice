@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const App = () => {
         handleUsernameChange={({ target }) => setUsername(target.value)}
         handlePasswordChange={({ target }) => setPassword(target.value)}
         handleSubmit={handleLogin}
-        />
+      />
     </Togglable>
   )
 
@@ -74,17 +74,17 @@ const App = () => {
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     blogService
-    .create(blogObject)
-    .then(returnedBlog => {
-      const newBlogs = blogs.concat(returnedBlog)
-      setBlogs(newBlogs.sort((a, b) => b.likes - a.likes) )
-      setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-      setMessageType('notification')
-    })
-    .catch(error => {
-      setMessage( error.message)
-      setMessageType('error')
-    })
+      .create(blogObject)
+      .then(returnedBlog => {
+        const newBlogs = blogs.concat(returnedBlog)
+        setBlogs(newBlogs.sort((a, b) => b.likes - a.likes) )
+        setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+        setMessageType('notification')
+      })
+      .catch(error => {
+        setMessage( error.message)
+        setMessageType('error')
+      })
   }
 
   const likeBlog = async (id, blog) => {
@@ -95,18 +95,18 @@ const App = () => {
     }
     catch
     {
-      setMessage(`Could not update blog`)
+      setMessage('Could not update blog')
       setMessageType('error')
-    } 
+    }
   }
 
   const deleteBlog = async (id, blog) => {
     if(window.confirm(`Remove blog "${blog.title}" by ${blog.author}`))
     {
       try {
-        const response = blogService.remove(id)
+        blogService.remove(id)
         setBlogs(blogs.filter((b) => b.id !== id))
-        setMessage(`Blog removed`)
+        setMessage('Blog removed')
         setMessageType('notification')
       } catch (error) {
         setMessage(error)
@@ -119,7 +119,7 @@ const App = () => {
 
   const blogForm = () => (
     <div>
-      {user.name} logged in 
+      {user.name} logged in
       <button onClick={logout}>logout</button>
       <br />
       <Togglable buttonLabel='new blog' ref={blogFormRef}>
@@ -144,7 +144,7 @@ const App = () => {
           {blogForm()}
         </div>
       )}
-      
+
       {blogs.map(blog =>
         <Blog key={blog.id} user={user} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} />
       )}

@@ -21,8 +21,7 @@ const Blog = ({ user, blog, likeBlog, deleteBlog }) => {
     likeBlog(blog.id, likedBlog)
   }
 
-  const minimizedBlog = () =>
-  (
+  const minimizedBlog = () => (
     <div style={blogStyle}>
       <div>
         {blog.title} {blog.author}
@@ -33,8 +32,7 @@ const Blog = ({ user, blog, likeBlog, deleteBlog }) => {
     </div>
   )
 
-  const fullBlog = () =>
-  (
+  const fullBlog = () => (
     <div style={blogStyle}>
       <div>
         {blog.title} {blog.author}
