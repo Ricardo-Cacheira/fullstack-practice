@@ -17,7 +17,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
     )  
   }, [])
 
@@ -77,7 +77,8 @@ const App = () => {
     .create(blogObject)
     .then(returnedBlog => {
       returnedBlog.user = user.id
-      setBlogs(blogs.concat(returnedBlog))
+      const newBlogs = blogs.concat(returnedBlog)
+      setBlogs(newBlogs.sort((a, b) => b.likes - a.likes) )
       setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
       setMessageType('notification')
     })
@@ -91,7 +92,7 @@ const App = () => {
     try{
       const updatedBlog = await blogService.update(id, blog)
       const newBlogs = blogs.map(b => (b.id !== id ? b : updatedBlog))
-      setBlogs(newBlogs)
+      setBlogs( newBlogs.sort((a, b) => b.likes - a.likes) )
     }
     catch
     {
