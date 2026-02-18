@@ -38,7 +38,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
 
       blogService.setToken(user.token)
       setUser(user)
@@ -76,7 +76,6 @@ const App = () => {
     blogService
     .create(blogObject)
     .then(returnedBlog => {
-      returnedBlog.user = user.id
       const newBlogs = blogs.concat(returnedBlog)
       setBlogs(newBlogs.sort((a, b) => b.likes - a.likes) )
       setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
@@ -101,6 +100,21 @@ const App = () => {
     } 
   }
 
+  const deleteBlog = async (id, blog) => {
+    if(window.confirm(`Remove blog "${blog.title}" by ${blog.author}`))
+    {
+      try {
+        const response = blogService.remove(id)
+        setBlogs(blogs.filter((b) => b.id !== id))
+        setMessage(`Blog removed`)
+        setMessageType('notification')
+      } catch (error) {
+        setMessage(error)
+        setMessageType('error')
+      }
+    }
+  }
+
   const blogFormRef = useRef()
 
   const blogForm = () => (
@@ -120,8 +134,6 @@ const App = () => {
     </div>
   )
 
-
-
   return (
     <div>
       <h2>blogs</h2>
@@ -134,7 +146,7 @@ const App = () => {
       )}
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
+        <Blog key={blog.id} user={user} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} />
       )}
     </div>
   )
