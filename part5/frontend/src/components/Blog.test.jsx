@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
+
+  const mockHandler = vi.fn()
   const blog = {
     title: 'Blog title',
     author: 'Author name',
@@ -18,6 +20,7 @@ describe('<Blog />', () => {
       <Blog
         blog={blog}
         user={null}
+        likeBlog={mockHandler}
       />
     )
   })
@@ -43,5 +46,17 @@ describe('<Blog />', () => {
     expect(url).toBeVisible()
     const likes = screen.getByText('likes 0')
     expect(likes).toBeVisible()
+  })
+
+  test('pressing like button twice calls works', async () => {
+    const user = userEvent.setup()
+    const open = screen.getByText('view')
+    await user.click(open)
+
+    const button = screen.getByText('like')
+    await user.click(button)
+    await user.click(button)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
   })
 })
