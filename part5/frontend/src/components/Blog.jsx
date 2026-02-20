@@ -2,7 +2,9 @@ import { useState } from 'react'
 
 const Blog = ({ user, blog, likeBlog, deleteBlog }) => {
   const [visible, setVisible] = useState(false)
-  const isFromUser = user.username === blog.user.username
+  const isFromUser = user === null || user === undefined
+  ? false
+  : user.username === blog.user.username
 
   const blogStyle = {
     paddingTop: 10,
