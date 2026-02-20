@@ -2,23 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import BlogForm from './BlogForm'
 
-describe('<Blog />', () => {
-
-  const mockHandler = vi.fn()
-  const blog = {
-    title: 'Blog title',
-    author: 'Author name',
-    url: 'exampleUrl',
-    likes: 0,
-    user: {
-      username: 'testUser',
-      name: 'Test User'
-    }
-  }
-  beforeEach(() => {
-
-  })
-
+describe('<BlogForm />', () => {
   test('<BlogForm /> updates parent state and calls onSubmit', async () => {
     const createBlog = vi.fn()
     const user = userEvent.setup()
