@@ -8,6 +8,10 @@ describe('<Blog />', () => {
     author: 'Author name',
     url: 'exampleUrl',
     likes: 0,
+    user: {
+      username: 'testUser',
+      name: 'Test User'
+    }
   }
   beforeEach(() => {
     render(
@@ -28,5 +32,16 @@ describe('<Blog />', () => {
     expect(element).toBeNull()
     const element2 = screen.queryByText('likes 0')
     expect(element2).toBeNull()
+  })
+
+  test('after clicking the button, url and likes are displayed', async () => {
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    await user.click(button)
+
+    const url = screen.getByText('exampleUrl')
+    expect(url).toBeVisible()
+    const likes = screen.getByText('likes 0')
+    expect(likes).toBeVisible()
   })
 })
