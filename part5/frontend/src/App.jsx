@@ -104,12 +104,12 @@ const App = () => {
     if(window.confirm(`Remove blog "${blog.title}" by ${blog.author}`))
     {
       try {
-        blogService.remove(id)
+        const response = await blogService.remove(id)
         setBlogs(blogs.filter((b) => b.id !== id))
         setMessage('Blog removed')
         setMessageType('notification')
       } catch (error) {
-        setMessage(error)
+        setMessage(error.message)
         setMessageType('error')
       }
     }
