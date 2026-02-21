@@ -11,6 +11,7 @@
     "dev": "cross-env NODE_ENV=development node --watch index.js",
     "test": "cross-env  NODE_ENV=test node --test",
     "lint": "eslint .",
+    "start:test": "cross-env NODE_ENV=test node --watch index.js",
     "testBlog": "cross-env NODE_ENV=test npm run test -- tests/blog_api.test.js",
     "only": "npm test -- --test-only",
     "testUser": "cross-env NODE_ENV=test npm run test -- tests/user_api.test.js"
