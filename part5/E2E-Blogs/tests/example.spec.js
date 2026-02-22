@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { createBlog, loginWith } = require('./helper')
+const { createBlog, loginWith, likeBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -84,6 +84,29 @@ describe('Blog app', () => {
       await page.getByRole('button', { name: 'view' }).click()
       // await expect(page.getByText('delete')).not.toBeVisible()
       await expect(page.getByRole('button', { name: 'delete' })).not.toBeVisible()
+    })
+
+    test('blogs are ordered by likes', async ({ page, request }) => {
+      await createBlog(page, 'blogName', 'author name', 'http://example.com')
+      await expect(page.getByText('blogName author name')).toBeVisible()
+      await createBlog(page, 'blogName2', 'author name', 'http://example.com')
+      await expect(page.getByText('blogName2 author name')).toBeVisible()
+      
+      const viewButtons = await page.getByRole('button', { name: 'view' }).all()
+      await viewButtons[0].click()
+      await likeOpenBlog(page)
+      await expect(page.getByText('likes 1')).toBeVisible()
+      await page.getByRole('button', { name: 'hide' }).click()
+      await viewButtons[1].click()
+      await likeOpenBlog(page)
+      await expect(page.getByText('likes 1')).toBeVisible()
+      await likeOpenBlog(page)
+      await expect(page.getByText('likes 2')).toBeVisible()
+      await page.getByRole('button', { name: 'hide' }).click()
+      await page.pause()
+      const blogNames = await page.locator('.blog').all()
+      await expect(blogNames[0]).toHaveText('blogName2 author nameview')
+      await expect(blogNames[1]).toHaveText('blogName author nameview')
     })
   })
 })

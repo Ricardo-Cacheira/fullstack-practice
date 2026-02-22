@@ -24,7 +24,7 @@ const Blog = ({ user, blog, likeBlog, deleteBlog }) => {
   }
 
   const minimizedBlog = () => (
-    <div style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       <div>
         {blog.title} {blog.author}
         <button onClick={() => setVisible(!visible)}>
