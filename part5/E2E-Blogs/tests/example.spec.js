@@ -108,5 +108,30 @@ describe('Blog app', () => {
       await expect(blogNames[0]).toHaveText('blogName2 author nameview')
       await expect(blogNames[1]).toHaveText('blogName author nameview')
     })
+
+    test('blogs are ordered by likes (improved)', async ({ page }) => {
+        await page.getByText('blog1').getByRole('button', { name: 'view'}).click()
+        await page.getByText('blog2').getByRole('button', { name: 'view'}).click()
+        await page.getByText('blog3').getByRole('button', { name: 'view'}).click()
+
+        await page.pause()
+        const button1 = page.getByText('blog1').getByRole('button', { name: 'like'})
+        await likeTimes(page, button1, 1)
+        await page.getByText('blog1').getByRole('button', { name: 'hide'}).click()
+
+        let button2 = page.getByText('blog2').getByRole('button', { name: 'like'})
+        await likeTimes(page, button2, 3)
+        await page.getByText('blog2').getByRole('button', { name: 'hide'}).click()
+
+        let button3 = page.getByText('blog3').getByRole('button', { name: 'like'})
+        await likeTimes(page, button3, 2)
+        await page.getByText('blog3').getByRole('button', { name: 'hide'}).click()
+
+        const blogDivs = await page.locator('div.blog').all()
+
+        expect(blogDivs[0]).toHaveText('blog2 by Ted Testerview') 
+        expect(blogDivs[1]).toHaveText('blog3 by Ted Testerview') 
+        expect(blogDivs[2]).toHaveText('blog1 by Ted Testerview') 
+      })
   })
 })
