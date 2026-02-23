@@ -16,7 +16,6 @@ const Anecdote = ({ anecdote, handleClick }) => {
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(({filter, anecdotes}) =>{
-      console.log(anecdotes)
       //can't sort the state without making a copy first
       const anecdoteList = anecdotes.filter(anecdotes => anecdotes.content.includes(filter))
       return anecdoteList.sort((a, b) => b.votes - a.votes)
