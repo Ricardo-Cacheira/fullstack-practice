@@ -8,7 +8,12 @@ const Notification = () => {
     marginBottom: 10
   }
 
-  return <div style={style}>{useSelector(({notification}) => notification)}</div>
+  const notification = useSelector(({notification}) => notification)
+
+  if(notification === '')
+    return <div></div>
+  else
+    return <div style={style}>{notification}</div>
 }
 
 export default Notification
