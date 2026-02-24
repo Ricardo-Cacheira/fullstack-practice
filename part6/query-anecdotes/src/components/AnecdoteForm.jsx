@@ -13,6 +13,10 @@ const AnecdoteForm = () => {
       notificationDispatch({type: 'NEW_NOTE', payload: newAnecdote.content})
       const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
+    },
+    onError: (error) =>
+    {
+      notificationDispatch({type: 'ERROR', payload: error.message})
     }
   })
 

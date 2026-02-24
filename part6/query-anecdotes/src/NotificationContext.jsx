@@ -6,6 +6,8 @@ const notificationReducer = (state, action) => {
       return `anecdote '${action.payload}' created`
     case 'NEW_VOTE':
       return `anecdote '${action.payload}' voted`
+    case 'ERROR':
+      return action.payload
     case 'RESET':
       return ''
     default:
